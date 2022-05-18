@@ -1,0 +1,82 @@
+
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="utf-8">
+<title>L2E Mini Project</title>
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js">
+</script>
+<script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+
+</head>
+<body>
+<!-- Main Container -->
+<div style='width:90hw;height:auto; border:1px solid black'>
+<!-- header start here -->
+<div style='margin:5px;width:90hw;height:auto;border:1px solid black'>
+<a href="index.html" ><img src='/styleOne/images/logo.png' style='float:left'></a>
+<div style='margin-top:15px;margin-bottom:15px;font-size:20pt'><a href="index.html">L2E</a></div>
+</div><!-- header ends here -->
+<!-- content section start here -->
+<div style='width:90hw;height:70vh;border:1px solid black; margin:5px'>
+<!-- left section start here -->
+<div style='height:64vh;margin:5px;border:1px solid black;padding:5px;float:left'>
+<a href="insert.html">Add Data</a> <br><br>
+<b>show Data</b><br><br>
+<a href="update.html">Update Data</a><br><br>
+<a href="delete.html">Delete Data</a>                
+</div>
+<!-- left section ends here -->
+<!-- right section starts here -->
+<div style='border:1px solid black;width:60hw;height:64vh;margin-left:105px;margin-top:5px;margin-bottom:5px;margin-right:5px;padding:5px'>
+<label style='margin-top:20px;margin-left:10px'>Employee Id</label>
+<input id="empId" placeholder="Enter employee Id" name="empId" type="text" /><br><br>
+<input style='margin-left:30px' type="button" value="SHOW DATA" onclick="showData();" />
+<p id="show"></p>
+<script>
+function showData(){
+var token = "90939036|-31949284157571926|90940523";
+var dbname = "SAMPLE";
+var relationName = "EMP-REL";
+var Id = document.getElementById("empId").value;
+var jsonStr = {
+empId: Id
+};
+var reqString = createGETRequest(token, dbname, relationName, JSON.stringify(jsonStr));
+//alert(reqString);
+jQuery.ajaxSetup({async: false});
+var resultObj = executeCommand(reqString,"http://api.login2explore.com:5577", "/api/irl");
+jQuery.ajaxSetup({async: true});
+var data = JSON.stringify(resultObj);
+var res = data.split("\"");
+var mainContainer = document.getElementById("show");
+mainContainer.innerHTML = "<br> Id: "+Id+" Name : " + res[10].replace("\\","") + "      Email : " + res[14].replace("\\","") 
+}
+function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+var url = dbBaseUrl + apiEndPointUrl;
+var jsonObj;
+$.post(url, reqString, function (result) {
+jsonObj = JSON.parse(result);
+}).fail(function (result) {
+var dataJsonObj = result.responseText;
+jsonObj = JSON.parse(dataJsonObj);
+});
+return jsonObj;
+}
+</script>
+</div><!-- right section ends here -->
+</div><!-- contenet section ends here -->
+<!-- footer starts here -->
+<div style='width:90hw;height:auto;border:1px solid black;margin:5px;text-align:center'>
+&copy; L2E 2022
+</div><!-- footer ends here -->
+</div><!-- Main Container ends here -->
+</body>
+</html>
+
+
